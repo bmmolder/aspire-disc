@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head><title>Signing in...</title></head>
+<body>
+<script>
+// This page receives the OAuth redirect, sends the code to the opener, then closes.
+try {
+  var params = new URLSearchParams(window.location.search);
+  var msg = { type: 'disc_auth_code' };
+  if (params.get('error')) {
+    msg.error = (params.get('error_description') || params.get('error')).split('\r')[0];
+  } else {
+    msg.code  = params.get('code');
+    msg.state = params.get('state');
+  }
+  if (window.opener) {
+    window.opener.postMessage(msg, 'https://aspiretech.sharepoint.com');
+  }
+} catch(e) {}
+window.close();
+</script>
+</body>
+</html>
